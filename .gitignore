@@ -1,0 +1,7 @@
+**/FImpossible Creations/
+/Library/
+/Temp/
+/ProjectSettings/
+/UserSettings/
+.vscode/
+**.log
