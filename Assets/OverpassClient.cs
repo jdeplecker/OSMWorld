@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿
 using System.Collections.Generic;
 using UnityEngine;
 using System.Net;
@@ -14,13 +14,20 @@ public class OverpassClient : MonoBehaviour
 
     public Vector2 position;
 
+    private List<OverpassHouse> houses = new List<OverpassHouse>();
+
     void Start()
     {
         List<OverpassElement> elements = GetOverpassArea(position).elements;
         print(elements.Count);
         elements.ForEach(delegate (OverpassElement element)
         {
-            createCube(element);
+            houses.Add(new OverpassHouse(element.geometry, position, scale));
+        });
+
+        houses.ForEach(delegate (OverpassHouse house)
+        {
+            house.UpdateMesh();
         });
     }
 
@@ -36,51 +43,5 @@ public class OverpassClient : MonoBehaviour
         StreamReader reader = new StreamReader(response.GetResponseStream());
         string jsonResponse = reader.ReadToEnd();
         return JsonUtility.FromJson<OverpassArea>(jsonResponse);
-    }
-
-    void createCube(OverpassElement element)
-    {
-        int polygonLength = element.geometry.Count - 1;
-        Vector3[] vertices = new Vector3[polygonLength];
-        // int[] triangles = new int[polygonLength * 6];
-        Vector2[] polygon = new Vector2[vertices.Length];
-
-        for (int i = 0; i < polygonLength; i++)
-        {
-            float lat = (element.geometry[i].lat - position.y) * scale;
-            float lon = (element.geometry[i].lon - position.x) * scale;
-
-            vertices[i] = new Vector3(lon, 10f, lat);
-            // vertices[i + polygonLength] = new Vector3(lon, 0f, lat);
-            polygon[i] = new Vector2(lon, lat);
-            // if (i < polygonLength - 1)
-            // {
-            //     triangles[i] = i;
-            //     triangles[i + 1] = i + polygonLength;
-            //     triangles[i + 2] = i + 1;
-            //     triangles[i + 3] = i + 1;
-            //     triangles[i + 4] = i + polygonLength;
-            //     triangles[i + 5] = i + polygonLength + 1;
-            // }
-        }
-
-
-        Mesh mesh = new Mesh();
-        mesh.vertices = vertices;
-        mesh.triangles = new Triangulator(polygon).Triangulate();//merge(triangles, new Triangulator(polygon).Triangulate());
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
-
-        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.position = new Vector3(0, 0, 0);
-        cube.GetComponent<MeshFilter>().mesh = mesh;
-    }
-
-    int[] merge(int[] front, int[] back)
-    {
-        int[] combined = new int[front.Length + back.Length];
-        Array.Copy(front, combined, front.Length);
-        Array.Copy(back, 0, combined, front.Length, back.Length);
-        return combined;
     }
 }
