@@ -8,10 +8,10 @@ public class Polygon
     public Polygon(List<OverpassGeometry> overpassPoints, Vector2 position, float scale)
     {
         overpassPoints.ForEach(pt => points.Add(asVector2(pt, position, scale)));
-        if (points[0] == points[points.Count - 1])
-        {
+        //if (points[0] == points[points.Count - 1])
+        //{
             points.RemoveAt(points.Count - 1);
-        }
+        //}
     }
 
     Vector2 asVector2(OverpassGeometry geometry, Vector2 position, float scale)
@@ -24,6 +24,11 @@ public class Polygon
     public List<Vector2> AsListOfPoints()
     {
         return new List<Vector2>(points);
+    }
+
+    public Vector2[] AsArrayOfPoints()
+    {
+        return new List<Vector2>(points).ToArray();
     }
 
     public Vector2 MeanPosition()

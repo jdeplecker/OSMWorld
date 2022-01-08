@@ -62,10 +62,12 @@
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Animations\FBasic_TranslateTransformSpace.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Cameras\FBasic_TPPCameraBehaviour.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Animations\FBasic_RotateSpinSin.cs" />
+     <Compile Include="Assets\Triangulation\Segment2D.cs" />
      <Compile Include="Assets\FImpossible Creations\Shared Tools\Editor Tools\Property Attributes\FPD_FoldFrameAttribute.cs" />
      <Compile Include="Assets\FImpossible Creations\Shared Tools\FHelpers\FLogicMethods.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Interactive\FBasic_PullableHinge.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Animations\FBasic_RotateTo.cs" />
+     <Compile Include="Assets\Triangulation\Vertex2D.cs" />
      <Compile Include="Assets\FImpossible Creations\Shared Tools\Editor Tools\Property Attributes\FPD_LayersAttribute.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Animations\FBasic_FollowTarget.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Utilities\FBasic_AnimatorPlayState.cs" />
@@ -80,6 +82,7 @@
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Animations\FBasic_SlideObjectTo.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Animations\FBasic_TimedExecutor.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Utilities\FBasic_MaterialTiler.cs" />
+     <Compile Include="Assets\Triangulation\Circle2D.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Conversations\FBasic_Conversation.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Character Controllers\FBasic_FheelekController.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\DEMO FBasic Assets\Scripts\FBasic_Demo_Controller.cs" />
@@ -89,10 +92,13 @@
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Character Controllers\FBasic_RigidbodyMovement.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Cameras\FBasic_FreeCameraBehaviour.cs" />
      <Compile Include="Assets\FImpossible Creations\Shared Tools\FHelpers\FTransformMethods.cs" />
+     <Compile Include="Assets\Triangulation\HalfEdge2D.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Interactive\FBasic_TrueInteractionBase.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Character Controllers\Extended\FBasic_FheelekFighter.cs" />
+     <Compile Include="Assets\Triangulation\Utils2D.cs" />
      <Compile Include="Assets\FImpossible Creations\Shared Tools\Editor Tools\Property Attributes\FPD_MiscAttributes.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Interactive\FBasic_AddPhysicalImpact.cs" />
+     <Compile Include="Assets\Triangulation\Polygon2D.cs" />
      <Compile Include="Assets\FImpossible Creations\Shared Tools\Editor Tools\Property Attributes\FD_HR.cs" />
      <Compile Include="Assets\FImpossible Creations\Shared Tools\Editor Tools\Property Attributes\FPD_DrawTexture.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Character Controllers\FBasic_CharacterInputAxis.cs" />
@@ -105,6 +111,7 @@
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Physical\FBasic_ProjectileBase.cs" />
      <Compile Include="Assets\FImpossible Creations\Shared Tools\FHelpers\FEasing.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Character Controllers\Scripts\FBasic_FheelekAnimator.cs" />
+     <Compile Include="Assets\Triangulation\Triangulation2D.cs" />
      <Compile Include="Assets\FImpossible Creations\Shared Tools\Shared Scripts\FBasic_Enums.cs" />
      <Compile Include="Assets\Triangulator.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Interactive\FBasic_InteractionAreaCanvas.cs" />
@@ -135,6 +142,7 @@
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Interactive\FBasic_PullableDrawer.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\DEMO FBasic Assets\Scripts\FBasic_Demo_AddDialogueToConversation.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Utilities\FBasic_SphericDuplicateOn.cs" />
+     <Compile Include="Assets\Triangulation\Triangle2D.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Scripts\FBasics_PathData.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\Behaviours\Conversations\FBasic_Conversation_UI.cs" />
      <Compile Include="Assets\FImpossible Creations\FBasic Assets\DEMO FBasic Assets\Scripts\FBasic_Demo_Cannon.cs" />

@@ -22,7 +22,7 @@ public class OverpassClient : MonoBehaviour
         print(elements.Count);
         elements.ForEach(delegate (OverpassElement element)
         {
-            houses.Add(new OverpassHouse(element.geometry, position, scale));
+            houses.Add(new OverpassHouse(element.geometry, position, scale, element.tags));
         });
 
         houses.ForEach(delegate (OverpassHouse house)
@@ -42,6 +42,7 @@ public class OverpassClient : MonoBehaviour
         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
         StreamReader reader = new StreamReader(response.GetResponseStream());
         string jsonResponse = reader.ReadToEnd();
+        Debug.Log(jsonResponse);
         return JsonUtility.FromJson<OverpassArea>(jsonResponse);
     }
 }

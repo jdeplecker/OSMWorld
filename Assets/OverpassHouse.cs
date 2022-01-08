@@ -1,74 +1,78 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using mattatz.Triangulation2DSystem;
 
 public class OverpassHouse
 {
 
     private GameObject gameObject;
-    private List<Vector3> vertices = new List<Vector3>();
+    private Vector3[] vertices;
     private int[] triangles;
 
     private Vector2 position;
     private float scale;
 
-    public OverpassHouse(List<OverpassGeometry> geometry, Vector2 position, float scale)
+    private Dictionary<string, string> tags;
+
+    public OverpassHouse(List<OverpassGeometry> geometry, Vector2 position, float scale, Dictionary<string, string> tags)
     {
         this.position = position;
         this.scale = scale;
+        this.tags = tags;
         // createHouse(geometry, new Polygon(geometry));
-        createRoof(new Polygon(geometry, position, scale));
-    }
-
-    void createHouse(List<OverpassGeometry> geometry, Polygon polygon)
-    {
-        int polygonLength = geometry.Count;
-        // vertices = new Vector3[polygonLength * 3];
-        int[] extrudedTriangles = new int[polygonLength * 6];
-
-        for (int i = 0; i < polygonLength; i++)
-        {
-            float lat = (geometry[i].lat - position.y) * scale;
-            float lon = (geometry[i].lon - position.x) * scale;
-
-            vertices[i] = new Vector3(lon, 10f, lat);
-            vertices[i + polygonLength] = new Vector3(lon, 10f, lat); // duplicated for use of hard edges
-            vertices[i + 2 * polygonLength] = new Vector3(lon, 0f, lat);
-            if (i < polygonLength - 1)
-            {
-                extrudedTriangles[6 * i] = i + polygonLength;
-                extrudedTriangles[6 * i + 1] = i + 2 * polygonLength;
-                extrudedTriangles[6 * i + 2] = i + 1 + polygonLength;
-                extrudedTriangles[6 * i + 3] = i + 1 + polygonLength;
-                extrudedTriangles[6 * i + 4] = i + 2 * polygonLength;
-                extrudedTriangles[6 * i + 5] = i + 1 + 2 * polygonLength;
-            }
+        try {
+            createRoof(new Polygon(geometry, position, scale));
+        } catch (Exception e) {
+            Debug.LogError(e);
         }
-
-        int[] polygonTriangles = new Triangulator(polygon.AsListOfPoints()).Triangulate();
-        triangles = merge(polygonTriangles, extrudedTriangles);
     }
 
-    void createRoof(Polygon polygon)
-    {
+    // void createHouse(List<OverpassGeometry> geometry, Polygon polygon)
+    // {
+    //     int polygonLength = geometry.Count;
+    //     // vertices = new Vector3[polygonLength * 3];
+    //     int[] extrudedTriangles = new int[polygonLength * 6];
+
+    //     for (int i = 0; i < polygonLength; i++)
+    //     {
+    //         float lat = (geometry[i].lat - position.y) * scale;
+    //         float lon = (geometry[i].lon - position.x) * scale;
+
+    //         vertices[i] = new Vector3(lon, 10f, lat);
+    //         vertices[i + polygonLength] = new Vector3(lon, 10f, lat); // duplicated for use of hard edges
+    //         vertices[i + 2 * polygonLength] = new Vector3(lon, 0f, lat);
+    //         if (i < polygonLength - 1)
+    //         {
+    //             extrudedTriangles[6 * i] = i + polygonLength;
+    //             extrudedTriangles[6 * i + 1] = i + 2 * polygonLength;
+    //             extrudedTriangles[6 * i + 2] = i + 1 + polygonLength;
+    //             extrudedTriangles[6 * i + 3] = i + 1 + polygonLength;
+    //             extrudedTriangles[6 * i + 4] = i + 2 * polygonLength;
+    //             extrudedTriangles[6 * i + 5] = i + 1 + 2 * polygonLength;
+    //         }
+    //     }
+
+    //     int[] polygonTriangles = new Triangulator(polygon.AsListOfPoints()).Triangulate();
+    //     triangles = merge(polygonTriangles, extrudedTriangles);
+    // }
+
+    void createRoof(Polygon polygon) {
+        var polygonMeanPosition = polygon.MeanPosition();
         gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        gameObject.transform.position = new Vector3(polygon.MeanPosition().x, 0, polygon.MeanPosition().y);
+        gameObject.transform.position = new Vector3(polygonMeanPosition.x * scale, 0, polygonMeanPosition.y * scale);
+        var pointsList = polygon.AsListOfPoints();
+        pointsList.Reverse();
+        var polygonArray = pointsList.ToArray();
+        Polygon2D polygon2d = Polygon2D.Contour(polygonArray);
 
-        polygon.AsListOfPoints().ForEach(point => vertices.Add(new Vector3(point.x, 10f, point.y)));
-        triangles = new Triangulator(polygon.AsListOfPoints()).Triangulate();
+        // construct Triangulation2D with Polygon2D and threshold angle (18f ~ 27f recommended)
+        Triangulation2D triangulation = new Triangulation2D(polygon2d, 22.5f);
 
-        for (int triangleIndex = 0; triangleIndex < triangles.Length / 3; triangleIndex += 3)
-        {
-            Vector3 normal = Vector3.Cross(vertices[triangles[triangleIndex + 1]] - vertices[triangles[triangleIndex]], vertices[triangles[triangleIndex + 2]] - vertices[triangles[triangleIndex]]);
-            normal.Normalize();
-            if (normal != Vector3.up)
-            {
-                Debug.Log("Flipped because normal " + normal + " isn't " + Vector3.up);
-                int temp = triangles[triangleIndex + 1];
-                triangles[triangleIndex + 1] = triangles[triangleIndex + 2];
-                triangles[triangleIndex + 2] = temp;
-            }
-        }
+        // build a mesh from triangles in a Triangulation2D instance
+        Mesh mesh = triangulation.Build((Vertex2D v) => { return new Vector3((v.Coordinate.x - polygonMeanPosition.x) * scale, 0f, (v.Coordinate.y - polygonMeanPosition.y)  * scale);});
+        vertices = mesh.vertices;
+        triangles = mesh.triangles;
     }
 
     int[] merge(int[] front, int[] back)
